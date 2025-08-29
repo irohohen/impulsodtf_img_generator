@@ -1,0 +1,10 @@
+# requirements.txt
+python-telegram-bot
+requests
+Pillow
+apscheduler
+pytz
+beautifulsoup4==4.13.4
+lxml==6.0.0
+openpyxl==3.1.5
+urllib3==2.5.0

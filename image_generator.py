@@ -28,6 +28,7 @@ def create_rate_image(ves: float, usd: float, eur: float) -> str:
 
         # --- Dibuja el texto en la imagen ---
         # ¡IMPORTANTE! Ajusta estas coordenadas (x, y) para tu imagen.
+        # Recuerda que debes rotar las letras en el editor de imágenes.
 
         draw.text((380, 520), ves_text, font=font_rate, fill="white")
 

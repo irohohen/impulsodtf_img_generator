@@ -208,3 +208,5 @@ __marimo__/
 
 #program files
 config.py
+*.png
+*.ttf

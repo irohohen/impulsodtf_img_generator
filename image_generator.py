@@ -2,6 +2,8 @@
 
 from PIL import Image, ImageDraw, ImageFont
 import api_services as svc
+import json
+import rotatedtext as rt
 import datetime
 
 def create_rate_image(ves: float, usd: float, eur: float) -> str:
@@ -9,7 +11,7 @@ def create_rate_image(ves: float, usd: float, eur: float) -> str:
     try:
         # Cargar la imagen de plantilla
         img = Image.open("image_generator_stuff/template.png").convert("RGBA")
-        draw = ImageDraw.Draw(img)
+        #draw = ImageDraw.Draw(img)
 
         # --- Configuración de fuentes y texto ---
         try:
@@ -25,16 +27,34 @@ def create_rate_image(ves: float, usd: float, eur: float) -> str:
         usd_text = f"{usd:,.2f}"
         eur_text = f"{eur:,.2f}"
 
+        # --- Cargar coordenadas y ángulos desde el archivo JSON ---
+        try:
+            with open("templatecords.json", "r") as f:
+                coords = json.load(f)
+        except FileNotFoundError:
+            print("Archivo 'templatecords.json' no encontrado. Usando coordenadas por defecto.")
+            coords = {
+                "ves": [380, 520],
+                "usd": [400, 635],
+                "eur": [420, 760],
+                "ves_angle": 0,
+                "usd_angle": 0,
+                "eur_angle": 0
+            }
+        ves_pos = tuple(coords.get("ves", (380, 520)))
+        usd_pos = tuple(coords.get("usd", (400, 635)))
+        eur_pos = tuple(coords.get("eur", (420, 760)))
+        ves_angle = coords.get("ves_angle", 0)
+        usd_angle = coords.get("usd_angle", 0)
+        eur_angle = coords.get("eur_angle", 0)
 
         # --- Dibuja el texto en la imagen ---
         # ¡IMPORTANTE! Ajusta estas coordenadas (x, y) para tu imagen.
         # Recuerda que debes rotar las letras en el editor de imágenes.
 
-        draw.text((380, 520), ves_text, font=font_rate, fill="white")
-
-        draw.text((400, 655), usd_text, font=font_rate, fill="white")
-
-        draw.text((420, 770), eur_text, font=font_rate, fill="black")
+        rt.draw_rotated_text(img, ves_text, ves_pos, ves_angle, font_rate, "white")
+        rt.draw_rotated_text(img, usd_text, usd_pos, usd_angle, font_rate, "white")
+        rt.draw_rotated_text(img, eur_text, eur_pos, eur_angle, font_rate, "black")
 
         # --- Dibuja la fecha actual ---
         #current_date = datetime.datetime.now().strftime("%d/%m/%Y")
@@ -47,11 +67,13 @@ def create_rate_image(ves: float, usd: float, eur: float) -> str:
 
         return output_path
 
-    except FileNotFoundError:
-        print("Error: No se encontró 'template.png'.")
+    except FileNotFoundError as e:
+        print(f"Error: Archivo no encontrado: {e}")
         return None
     except Exception as e:
         print(f"Ocurrió un error al generar la imagen: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 

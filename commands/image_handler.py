@@ -23,9 +23,9 @@ async def generar_imagen(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     # Generar la imagen con las tasas obtenidas
     ruta_imagen = img.create_rate_image(ves, usd, eur)
-    
-    # Enviar la imagen al usuario
-    with open(ruta_imagen, 'rb') as foto:
+
+    # Enviar la imagen al usuario con la proporcion original
+    with open(ruta_imagen,"rb") as foto:
         await update.message.reply_photo(photo=foto, caption="📊 Aquí están las tasas de cambio actuales.")
 
 # Definimos el comando /image

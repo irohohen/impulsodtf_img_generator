@@ -12,7 +12,7 @@ async def generar_imagen(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     # Obtener las tasas de cambio actuales
     #_,_,tasa_usdt = svc.get_binance_p2p_prices("BUY")
 
-    usd =  8  #ves / svc.get_bcv_rate()
+    usd =  7.5  #ves / svc.get_bcv_rate()
     ves =  usd * svc.get_bcv_rate()
     eur = ves / svc.get_bcv_rate("eur")
 
